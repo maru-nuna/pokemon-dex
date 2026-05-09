@@ -184,10 +184,15 @@
       text-align: center;
     }
     .empty-state img {
-      width: 120px;
-      height: 120px;
+      width: 96px;
+      height: 96px;
       image-rendering: pixelated;
-      margin-bottom: 16px;
+      margin-bottom: 20px;
+      animation: float 2s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
     }
     .empty-state p {
       color: var(--sub);
@@ -456,7 +461,7 @@
 
 <nav>
   <button class="active" onclick="switchTab(event, 'dex')">📖 포켓몬 도감</button>
-  <button onclick="switchTab(event, 'favorites')">❤️ 즐겨찾기</button>
+  <button onclick="switchTab(event, 'favorites')">❤️ 좋아하는 포켓몬</button>
   <button onclick="switchTab(event, 'quiz')">🎯 퀴즈</button>
 </nav>
 
@@ -479,7 +484,7 @@
   </div>
   <div id="dex-grid" class="grid">
     <div class="empty-state">
-      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/132.gif" alt="메타몽" />
+      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/700.gif" alt="님피아" />
       <p>위에서 세대를 선택해주세요!</p>
     </div>
   </div>
@@ -496,7 +501,7 @@
     <div class="quiz-card" id="quiz-start-screen">
       <h2>포켓몬 퀴즈</h2>
       <div style="display:flex;justify-content:center;margin-bottom:20px">
-        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/132.gif" alt="메타몽" style="width:90px;height:90px;image-rendering:pixelated" />
+        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/959.gif" alt="두드리짱" style="width:120px;height:120px;image-rendering:pixelated;animation:float 2s ease-in-out infinite" />
       </div>
       <p style="color:var(--sub);margin-bottom:8px">실루엣을 보고 포켓몬 이름을 맞혀보세요!</p>
       <p style="color:var(--sub);font-size:13px;margin-bottom:8px">1~9세대 전체에서 무작위로 출제됩니다.</p>
@@ -515,7 +520,7 @@
         <div class="score-text">이번 세션: <span id="q-score">0</span>/<span id="q-total">0</span></div>
       </div>
       <div id="quiz-loading" class="quiz-loading">
-        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/132.gif" alt="로딩중" />
+        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/959.gif" alt="로딩중" />
         <p style="margin-top:8px;font-size:14px">문제를 가져오는 중...</p>
       </div>
       <div id="quiz-content" style="display:none">
@@ -624,7 +629,7 @@ async function onGenChange() {
   const { start, end } = GENERATIONS[gen];
   const grid = document.getElementById('dex-grid');
   grid.innerHTML = `<div class="empty-state">
-    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/132.gif" alt="로딩중" />
+    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/700.gif" alt="님피아" />
     <p>포켓몬을 불러오는 중... (${end - start + 1}마리)</p>
   </div>`;
   document.getElementById('search-input').value = '';
@@ -660,7 +665,7 @@ function renderGrid(list) {
   const grid = document.getElementById('dex-grid');
   if (!list.length) {
     grid.innerHTML = `<div class="empty-state">
-      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/132.gif" alt="메타몽" />
+      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/700.gif" alt="님피아" />
       <p>검색 결과가 없어요.</p>
     </div>`;
     return;
@@ -715,13 +720,13 @@ async function renderFavorites() {
   const grid = document.getElementById('fav-grid');
   if (!favorites.length) {
     grid.innerHTML = `<div class="empty-state">
-      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/132.gif" alt="메타몽" />
-      <p>즐겨찾기한 포켓몬이 없어요.<br>도감에서 ♥ 버튼을 눌러보세요!</p>
+      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/132.gif" alt="메타몽" />
+      <p>좋아하는 포켓몬이 없어요.<br>도감에서 ♥ 버튼을 눌러보세요!</p>
     </div>`;
     return;
   }
   grid.innerHTML = `<div class="empty-state">
-    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/132.gif" alt="로딩중" />
+    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/132.gif" alt="메타몽" />
     <p>불러오는 중...</p>
   </div>`;
   const list = await Promise.all(favorites.map(fetchPokemon));
