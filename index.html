@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>포켓몬 도감</title>
+  <style>
+    :root {
+      --red: #FF1111;
+      --yellow: #FFDE00;
+      --blue: #3B4CCA;
+      --dark: #1a1a2e;
+      --card-bg: #ffffff;
+      --gray: #f4f4f8;
+      --text: #222;
+      --sub: #666;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', 'Apple SD Gothic Neo', sans-serif;
+      background: var(--gray);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* 헤더 */
+    header {
+      background: var(--red);
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+    header .logo {
+      font-size: 24px;
+      font-weight: 900;
+      color: var(--yellow);
+      letter-spacing: -1px;
+      text-shadow: 2px 2px 0 var(--blue);
+    }
+    header .logo span { color: #fff; }
+
+    /* 탭 */
+    nav {
+      background: var(--dark);
+      display: flex;
+      gap: 0;
+    }
+    nav button {
+      flex: 1;
+      padding: 14px;
+      border: none;
+      background: transparent;
+      color: #aaa;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      border-bottom: 3px solid transparent;
+    }
+    nav button.active {
+      color: var(--yellow);
+      border-bottom-color: var(--yellow);
+    }
+    nav button:hover:not(.active) { color: #fff; }
+
+    /* 탭 패널 */
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* 필터 바 */
+    .filter-bar {
+      background: #fff;
+      padding: 16px 24px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+      border-bottom: 1px solid #e0e0e0;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .filter-bar select,
+    .filter-bar input {
+      padding: 9px 14px;
+      border: 2px solid #ddd;
+      border-radius: 10px;
+      font-size: 14px;
+      outline: none;
+      transition: border 0.2s;
+      background: #fff;
+    }
+    .filter-bar select:focus,
+    .filter-bar input:focus { border-color: var(--red); }
+    .filter-bar input { flex: 1; min-width: 180px; }
+    .filter-bar select { cursor: pointer; }
+
+    /* 카드 그리드 */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 16px;
+      padding: 24px;
+    }
+
+    .pokemon-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 16px 12px;
+      text-align: center;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      transition: transform 0.15s, box-shadow 0.15s;
+      position: relative;
+    }
+    .pokemon-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    }
+    .pokemon-card img {
+      width: 96px;
+      height: 96px;
+      image-rendering: pixelated;
+    }
+    .pokemon-card .num {
+      font-size: 11px;
+      color: var(--sub);
+      margin-bottom: 4px;
+    }
+    .pokemon-card .name {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .pokemon-card .types {
+      display: flex;
+      justify-content: center;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+    .type-badge {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 20px;
+      color: #fff;
+      font-weight: 600;
+    }
+
+    /* 하트 버튼 */
+    .heart-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      line-height: 1;
+      transition: transform 0.1s;
+    }
+    .heart-btn:hover { transform: scale(1.3); }
+    .heart-btn.liked { color: var(--red); }
+    .heart-btn:not(.liked) { color: #ddd; }
+
+    /* 로딩 */
+    .loading {
+      text-align: center;
+      padding: 60px;
+      color: var(--sub);
+      font-size: 16px;
+    }
+    .spinner {
+      width: 40px; height: 40px;
+      border: 4px solid #eee;
+      border-top-color: var(--red);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 16px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* 모달 */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: #fff;
+      border-radius: 24px;
+      max-width: 420px;
+      width: 100%;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      animation: pop 0.2s ease;
+    }
+    @keyframes pop { from { transform: scale(0.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    .modal-header {
+      padding: 28px 28px 16px;
+      text-align: center;
+    }
+    .modal-header img { width: 130px; height: 130px; image-rendering: pixelated; }
+    .modal-header .modal-num { color: var(--sub); font-size: 13px; margin-bottom: 4px; }
+    .modal-header .modal-name { font-size: 26px; font-weight: 900; }
+    .modal-body {
+      padding: 0 28px 28px;
+    }
+    .modal-types { display: flex; gap: 6px; justify-content: center; margin-bottom: 16px; }
+    .stat-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+    .stat-label { width: 80px; color: var(--sub); flex-shrink: 0; }
+    .stat-bar-wrap { flex: 1; background: #eee; border-radius: 10px; height: 8px; overflow: hidden; }
+    .stat-bar { height: 100%; border-radius: 10px; background: var(--red); }
+    .stat-val { width: 32px; text-align: right; font-weight: 700; font-size: 13px; }
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 16px 0;
+    }
+    .info-item {
+      background: var(--gray);
+      border-radius: 10px;
+      padding: 10px;
+      text-align: center;
+    }
+    .info-item .val { font-size: 18px; font-weight: 700; }
+    .info-item .lbl { font-size: 11px; color: var(--sub); margin-top: 2px; }
+    .modal-close {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      background: var(--red);
+      color: #fff;
+      border: none;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      border-radius: 12px;
+      margin-top: 16px;
+    }
+    .modal-close:hover { background: #cc0000; }
+
+    /* 즐겨찾기 탭 */
+    .empty-msg {
+      text-align: center;
+      padding: 80px 20px;
+      color: var(--sub);
+    }
+    .empty-msg .icon { font-size: 60px; margin-bottom: 12px; }
+    .empty-msg p { font-size: 16px; }
+
+    /* 퀴즈 탭 */
+    .quiz-wrap {
+      max-width: 520px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+    .quiz-card {
+      background: #fff;
+      border-radius: 24px;
+      padding: 32px;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+    .quiz-card h2 { font-size: 20px; color: var(--sub); margin-bottom: 24px; }
+    .quiz-img-wrap {
+      width: 200px;
+      height: 200px;
+      margin: 0 auto 24px;
+      position: relative;
+    }
+    .quiz-img-wrap img {
+      width: 100%;
+      height: 100%;
+      image-rendering: pixelated;
+    }
+    .quiz-img-wrap img.silhouette { filter: brightness(0); }
+    .quiz-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .quiz-option {
+      padding: 14px;
+      border: 2px solid #ddd;
+      border-radius: 12px;
+      background: #fff;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .quiz-option:hover:not(:disabled) { border-color: var(--blue); background: #eef0ff; }
+    .quiz-option.correct { border-color: #22c55e; background: #f0fdf4; color: #16a34a; }
+    .quiz-option.wrong { border-color: var(--red); background: #fff1f1; color: var(--red); }
+    .quiz-option:disabled { cursor: default; }
+    .quiz-result { font-size: 20px; font-weight: 700; margin-bottom: 8px; min-height: 32px; }
+    .quiz-result.correct-text { color: #16a34a; }
+    .quiz-result.wrong-text { color: var(--red); }
+    .score-board {
+      font-size: 14px;
+      color: var(--sub);
+      margin-bottom: 20px;
+    }
+    .quiz-next-btn {
+      padding: 12px 32px;
+      background: var(--red);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      display: none;
+    }
+    .quiz-next-btn:hover { background: #cc0000; }
+    .quiz-start-btn {
+      padding: 14px 40px;
+      background: var(--blue);
+      color: #fff;
+      border: none;
+      border-radius: 14px;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 16px;
+    }
+    .quiz-start-btn:hover { background: #2a3aa0; }
+
+    /* 타입 색상 */
+    .t-normal{background:#A8A878} .t-fire{background:#F08030} .t-water{background:#6890F0}
+    .t-electric{background:#F8D030} .t-grass{background:#78C850} .t-ice{background:#98D8D8}
+    .t-fighting{background:#C03028} .t-poison{background:#A040A0} .t-ground{background:#E0C068}
+    .t-flying{background:#A890F0} .t-psychic{background:#F85888} .t-bug{background:#A8B820}
+    .t-rock{background:#B8A038} .t-ghost{background:#705898} .t-dragon{background:#7038F8}
+    .t-dark{background:#705848} .t-steel{background:#B8B8D0} .t-fairy{background:#EE99AC}
+
+    @media (max-width: 480px) {
+      .grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; padding: 12px; }
+      .filter-bar { padding: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Poké<span>Dex</span></div>
+</header>
+
+<nav>
+  <button class="active" onclick="switchTab('dex')">📖 포켓몬 도감</button>
+  <button onclick="switchTab('favorites')">❤️ 즐겨찾기</button>
+  <button onclick="switchTab('quiz')">🎯 퀴즈</button>
+</nav>
+
+<!-- 도감 탭 -->
+<div id="tab-dex" class="tab-panel active">
+  <div class="filter-bar">
+    <select id="gen-select" onchange="onGenChange()">
+      <option value="">세대 / 지방 선택</option>
+      <option value="1">1세대 — 관동지방 (1~151)</option>
+      <option value="2">2세대 — 성도지방 (152~251)</option>
+      <option value="3">3세대 — 호연지방 (252~386)</option>
+      <option value="4">4세대 — 신오지방 (387~493)</option>
+      <option value="5">5세대 — 하나지방 (494~649)</option>
+      <option value="6">6세대 — 칼로스지방 (650~721)</option>
+      <option value="7">7세대 — 알로라지방 (722~809)</option>
+      <option value="8">8세대 — 가라르지방 (810~905)</option>
+      <option value="9">9세대 — 팔데아지방 (906~1025)</option>
+    </select>
+    <input id="search-input" type="text" placeholder="이름으로 검색..." oninput="filterCards()" />
+  </div>
+  <div id="dex-grid" class="grid">
+    <div class="loading">
+      <div class="spinner"></div>
+      세대를 선택해주세요!
+    </div>
+  </div>
+</div>
+
+<!-- 즐겨찾기 탭 -->
+<div id="tab-favorites" class="tab-panel">
+  <div id="fav-grid" class="grid"></div>
+</div>
+
+<!-- 퀴즈 탭 -->
+<div id="tab-quiz" class="tab-panel">
+  <div class="quiz-wrap">
+    <div class="quiz-card" id="quiz-start-screen">
+      <h2>포켓몬 퀴즈</h2>
+      <p style="color:var(--sub);margin-bottom:8px">실루엣을 보고 포켓몬 이름을 맞혀보세요!</p>
+      <p style="color:var(--sub);font-size:13px">먼저 도감에서 세대를 선택해야 퀴즈를 시작할 수 있어요.</p>
+      <button class="quiz-start-btn" onclick="startQuiz()">퀴즈 시작!</button>
+    </div>
+    <div class="quiz-card" id="quiz-play-screen" style="display:none">
+      <div class="score-board">점수: <span id="q-score">0</span> / <span id="q-total">0</span></div>
+      <div class="quiz-img-wrap">
+        <img id="quiz-img" src="" alt="" class="silhouette" />
+      </div>
+      <h2 style="margin-bottom:16px">이 포켓몬은 누구?</h2>
+      <div class="quiz-options" id="quiz-options"></div>
+      <div class="quiz-result" id="quiz-result"></div>
+      <button class="quiz-next-btn" id="quiz-next" onclick="nextQuestion()">다음 문제 →</button>
+    </div>
+  </div>
+</div>
+
+<!-- 상세 모달 -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <img id="modal-img" src="" alt="" />
+      <div class="modal-num" id="modal-num"></div>
+      <div class="modal-name" id="modal-name"></div>
+      <div class="modal-types" id="modal-types"></div>
+    </div>
+    <div class="modal-body">
+      <div class="info-grid">
+        <div class="info-item">
+          <div class="val" id="modal-height"></div>
+          <div class="lbl">키</div>
+        </div>
+        <div class="info-item">
+          <div class="val" id="modal-weight"></div>
+          <div class="lbl">몸무게</div>
+        </div>
+      </div>
+      <div id="modal-stats"></div>
+      <button class="modal-close" onclick="closeModalBtn()">닫기</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── 세대 정보 ──────────────────────────────────────
+const GENERATIONS = {
+  1: { start: 1,   end: 151  },
+  2: { start: 152, end: 251  },
+  3: { start: 252, end: 386  },
+  4: { start: 387, end: 493  },
+  5: { start: 494, end: 649  },
+  6: { start: 650, end: 721  },
+  7: { start: 722, end: 809  },
+  8: { start: 810, end: 905  },
+  9: { start: 906, end: 1025 },
+};
+
+const TYPE_KO = {
+  normal:'노말', fire:'불꽃', water:'물', electric:'전기', grass:'풀',
+  ice:'얼음', fighting:'격투', poison:'독', ground:'땅', flying:'비행',
+  psychic:'에스퍼', bug:'벌레', rock:'바위', ghost:'고스트', dragon:'드래곤',
+  dark:'악', steel:'강철', fairy:'페어리'
+};
+
+const STAT_KO = {
+  hp:'HP', attack:'공격', defense:'방어',
+  'special-attack':'특수공격', 'special-defense':'특수방어', speed:'스피드'
+};
+
+const STAT_MAX = { hp:255, attack:190, defense:230, 'special-attack':194, 'special-defense':230, speed:200 };
+
+// ── 상태 ────────────────────────────────────────────
+let currentPokemon = [];   // 현재 세대 포켓몬 목록 [{id, name, types}]
+let favorites = JSON.parse(localStorage.getItem('poke-favs') || '[]');
+let quizPool = [];
+let quizScore = 0;
+let quizTotal = 0;
+let currentQuestion = null;
+
+// ── 탭 전환 ─────────────────────────────────────────
+function switchTab(tab) {
+  document.querySelectorAll('.tab-panel').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(el => el.classList.remove('active'));
+  document.getElementById(`tab-${tab}`).classList.add('active');
+  event.target.classList.add('active');
+  if (tab === 'favorites') renderFavorites();
+}
+
+// ── 세대 선택 ────────────────────────────────────────
+async function onGenChange() {
+  const gen = document.getElementById('gen-select').value;
+  if (!gen) return;
+  const { start, end } = GENERATIONS[gen];
+  const grid = document.getElementById('dex-grid');
+  grid.innerHTML = `<div class="loading" style="grid-column:1/-1"><div class="spinner"></div>포켓몬 불러오는 중... (${end - start + 1}마리)</div>`;
+  document.getElementById('search-input').value = '';
+
+  const ids = Array.from({ length: end - start + 1 }, (_, i) => start + i);
+  currentPokemon = await Promise.all(ids.map(fetchPokemon));
+  renderGrid(currentPokemon);
+}
+
+// ── API 호출 ─────────────────────────────────────────
+async function fetchPokemon(id) {
+  const [base, species] = await Promise.all([
+    fetch(`https://pokeapi.co/api/v2/pokemon/${id}`).then(r => r.json()),
+    fetch(`https://pokeapi.co/api/v2/pokemon-species/${id}`).then(r => r.json())
+  ]);
+  const koName = species.names.find(n => n.language.name === 'ko')?.name || base.name;
+  return {
+    id,
+    name: koName,
+    types: base.types.map(t => t.type.name),
+    img: base.sprites.other['official-artwork'].front_default || base.sprites.front_default,
+    height: base.height,
+    weight: base.weight,
+    stats: base.stats.map(s => ({ name: s.stat.name, value: s.base_stat }))
+  };
+}
+
+// ── 카드 렌더 ────────────────────────────────────────
+function renderGrid(list) {
+  const grid = document.getElementById('dex-grid');
+  if (!list.length) {
+    grid.innerHTML = '<div class="loading" style="grid-column:1/-1">검색 결과가 없어요.</div>';
+    return;
+  }
+  grid.innerHTML = list.map(p => cardHTML(p, 'dex-grid')).join('');
+}
+
+function cardHTML(p, context) {
+  const isFav = favorites.includes(p.id);
+  return `
+    <div class="pokemon-card" onclick="openModal(${p.id})">
+      <button class="heart-btn ${isFav ? 'liked' : ''}"
+        onclick="toggleFav(event, ${p.id})"
+        title="${isFav ? '즐겨찾기 해제' : '즐겨찾기 추가'}">♥</button>
+      <div class="num">#${String(p.id).padStart(4,'0')}</div>
+      <img src="${p.img}" alt="${p.name}" loading="lazy" />
+      <div class="name">${p.name}</div>
+      <div class="types">${p.types.map(t =>
+        `<span class="type-badge t-${t}">${TYPE_KO[t] || t}</span>`
+      ).join('')}</div>
+    </div>`;
+}
+
+// ── 검색 필터 ────────────────────────────────────────
+function filterCards() {
+  const q = document.getElementById('search-input').value.trim();
+  const filtered = q ? currentPokemon.filter(p => p.name.includes(q)) : currentPokemon;
+  renderGrid(filtered);
+}
+
+// ── 즐겨찾기 ─────────────────────────────────────────
+function toggleFav(e, id) {
+  e.stopPropagation();
+  if (favorites.includes(id)) {
+    favorites = favorites.filter(f => f !== id);
+  } else {
+    favorites.push(id);
+  }
+  localStorage.setItem('poke-favs', JSON.stringify(favorites));
+  // 버튼 UI 즉시 업데이트
+  const btn = e.target;
+  btn.classList.toggle('liked', favorites.includes(id));
+}
+
+async function renderFavorites() {
+  const grid = document.getElementById('fav-grid');
+  if (!favorites.length) {
+    grid.innerHTML = `<div class="empty-msg" style="grid-column:1/-1"><div class="icon">🤍</div><p>즐겨찾기한 포켓몬이 없어요.<br>도감에서 ♥ 버튼을 눌러보세요!</p></div>`;
+    return;
+  }
+  grid.innerHTML = `<div class="loading" style="grid-column:1/-1"><div class="spinner"></div>불러오는 중...</div>`;
+  const list = await Promise.all(favorites.map(fetchPokemon));
+  grid.innerHTML = list.map(p => cardHTML(p, 'fav-grid')).join('');
+}
+
+// ── 상세 모달 ─────────────────────────────────────────
+async function openModal(id) {
+  const p = currentPokemon.find(x => x.id === id) || await fetchPokemon(id);
+  document.getElementById('modal-img').src = p.img;
+  document.getElementById('modal-num').textContent = `#${String(p.id).padStart(4,'0')}`;
+  document.getElementById('modal-name').textContent = p.name;
+  document.getElementById('modal-types').innerHTML = p.types.map(t =>
+    `<span class="type-badge t-${t}">${TYPE_KO[t] || t}</span>`
+  ).join('');
+  document.getElementById('modal-height').textContent = `${(p.height / 10).toFixed(1)}m`;
+  document.getElementById('modal-weight').textContent = `${(p.weight / 10).toFixed(1)}kg`;
+  document.getElementById('modal-stats').innerHTML = p.stats.map(s => {
+    const pct = Math.round((s.value / (STAT_MAX[s.name] || 255)) * 100);
+    return `<div class="stat-row">
+      <span class="stat-label">${STAT_KO[s.name] || s.name}</span>
+      <div class="stat-bar-wrap"><div class="stat-bar" style="width:${pct}%"></div></div>
+      <span class="stat-val">${s.value}</span>
+    </div>`;
+  }).join('');
+  document.getElementById('modal-overlay').classList.add('open');
+}
+function closeModal(e) { if (e.target === e.currentTarget) closeModalBtn(); }
+function closeModalBtn() { document.getElementById('modal-overlay').classList.remove('open'); }
+
+// ── 퀴즈 ──────────────────────────────────────────────
+function startQuiz() {
+  if (!currentPokemon.length) {
+    alert('먼저 도감 탭에서 세대를 선택해주세요!');
+    return;
+  }
+  quizPool = [...currentPokemon].sort(() => Math.random() - 0.5);
+  quizScore = 0;
+  quizTotal = 0;
+  document.getElementById('quiz-start-screen').style.display = 'none';
+  document.getElementById('quiz-play-screen').style.display = 'block';
+  nextQuestion();
+}
+
+function nextQuestion() {
+  if (!quizPool.length) {
+    document.getElementById('quiz-result').textContent = '';
+    document.getElementById('quiz-result').className = 'quiz-result';
+    document.getElementById('quiz-next').style.display = 'none';
+    document.getElementById('quiz-play-screen').style.display = 'none';
+    document.getElementById('quiz-start-screen').style.display = 'block';
+    document.getElementById('quiz-start-screen').innerHTML = `
+      <h2>퀴즈 완료! 🎉</h2>
+      <p style="font-size:32px;margin:20px 0;font-weight:900;color:var(--blue)">${quizScore} / ${quizTotal}</p>
+      <p style="color:var(--sub);margin-bottom:24px">${getQuizComment(quizScore, quizTotal)}</p>
+      <button class="quiz-start-btn" onclick="location.reload()">다시 하기</button>`;
+    return;
+  }
+
+  currentQuestion = quizPool.pop();
+  const img = document.getElementById('quiz-img');
+  img.src = currentQuestion.img;
+  img.className = 'silhouette';
+
+  const wrongs = currentPokemon
+    .filter(p => p.id !== currentQuestion.id)
+    .sort(() => Math.random() - 0.5)
+    .slice(0, 3);
+  const options = [...wrongs, currentQuestion].sort(() => Math.random() - 0.5);
+
+  document.getElementById('quiz-options').innerHTML = options.map(p =>
+    `<button class="quiz-option" onclick="checkAnswer(${p.id})">${p.name}</button>`
+  ).join('');
+  document.getElementById('quiz-result').textContent = '';
+  document.getElementById('quiz-result').className = 'quiz-result';
+  document.getElementById('quiz-next').style.display = 'none';
+  updateScore();
+}
+
+function checkAnswer(id) {
+  document.querySelectorAll('.quiz-option').forEach(btn => {
+    btn.disabled = true;
+    if (btn.textContent === currentQuestion.name) btn.classList.add('correct');
+    else if (btn.textContent === currentPokemon.find(p => p.id === id)?.name) btn.classList.add('wrong');
+  });
+
+  document.getElementById('quiz-img').className = '';
+  quizTotal++;
+  const result = document.getElementById('quiz-result');
+  if (id === currentQuestion.id) {
+    quizScore++;
+    result.textContent = '정답이에요! 🎉';
+    result.className = 'quiz-result correct-text';
+  } else {
+    result.textContent = `오답! 정답은 ${currentQuestion.name}이에요.`;
+    result.className = 'quiz-result wrong-text';
+  }
+  document.getElementById('quiz-next').style.display = 'inline-block';
+  updateScore();
+}
+
+function updateScore() {
+  document.getElementById('q-score').textContent = quizScore;
+  document.getElementById('q-total').textContent = quizTotal;
+}
+
+function getQuizComment(score, total) {
+  const ratio = score / total;
+  if (ratio === 1) return '완벽해요! 포켓몬 마스터! 🏆';
+  if (ratio >= 0.8) return '정말 잘했어요! 포켓몬 박사! 👍';
+  if (ratio >= 0.5) return '절반 이상 맞혔어요! 조금만 더! 💪';
+  return '포켓몬을 더 공부해봐요! 📚';
+}
+</script>
+</body>
+</html>
