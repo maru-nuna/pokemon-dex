@@ -29,7 +29,6 @@
       min-height: 100vh;
     }
 
-    /* 헤더 */
     header {
       background: #fff;
       padding: 20px 28px;
@@ -49,144 +48,70 @@
       color: transparent;
     }
 
-    /* 탭 */
-    nav {
-      background: var(--dark);
-      display: flex;
-      gap: 0;
-    }
+    nav { background: var(--dark); display: flex; gap: 0; }
     nav button {
-      flex: 1;
-      padding: 14px;
-      border: none;
-      background: transparent;
-      color: #aaa;
-      font-size: 15px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-      border-bottom: 3px solid transparent;
-      font-family: inherit;
+      flex: 1; padding: 14px; border: none; background: transparent;
+      color: #aaa; font-size: 15px; font-weight: 600; cursor: pointer;
+      transition: all 0.2s; border-bottom: 3px solid transparent; font-family: inherit;
     }
-    nav button.active {
-      color: var(--yellow);
-      border-bottom-color: var(--yellow);
-    }
+    nav button.active { color: var(--yellow); border-bottom-color: var(--yellow); }
     nav button:hover:not(.active) { color: #fff; }
 
     .tab-panel { display: none; }
     .tab-panel.active { display: block; }
 
-    /* 필터 바 */
     .filter-bar {
-      background: #fff;
-      padding: 16px 24px;
-      display: flex;
-      gap: 12px;
-      align-items: center;
-      flex-wrap: wrap;
-      border-bottom: 1px solid #e0e0e0;
-      position: sticky;
-      top: 0;
-      z-index: 10;
+      background: #fff; padding: 16px 24px; display: flex; gap: 12px;
+      align-items: center; flex-wrap: wrap; border-bottom: 1px solid #e0e0e0;
+      position: sticky; top: 0; z-index: 10;
     }
-    .filter-bar select,
-    .filter-bar input {
-      padding: 9px 14px;
-      border: 2px solid #ddd;
-      border-radius: 10px;
-      font-size: 14px;
-      outline: none;
-      transition: border 0.2s;
-      background: #fff;
-      font-family: inherit;
+    .filter-bar select, .filter-bar input {
+      padding: 9px 14px; border: 2px solid #ddd; border-radius: 10px;
+      font-size: 14px; outline: none; transition: border 0.2s; background: #fff; font-family: inherit;
     }
-    .filter-bar select:focus,
-    .filter-bar input:focus { border-color: var(--red); }
+    .filter-bar select:focus, .filter-bar input:focus { border-color: var(--red); }
     .filter-bar input { flex: 1; min-width: 180px; }
     .filter-bar select { cursor: pointer; }
 
-    /* 카드 그리드 */
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-      gap: 16px;
-      padding: 24px;
+      gap: 16px; padding: 24px;
     }
 
     .pokemon-card {
-      background: var(--card-bg);
-      border-radius: 16px;
-      padding: 16px 12px;
-      text-align: center;
-      cursor: pointer;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-      transition: transform 0.15s, box-shadow 0.15s;
-      position: relative;
+      background: var(--card-bg); border-radius: 16px; padding: 16px 12px;
+      text-align: center; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      transition: transform 0.15s, box-shadow 0.15s; position: relative;
     }
-    .pokemon-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-    }
-    .pokemon-card img {
-      width: 96px;
-      height: 96px;
-      image-rendering: pixelated;
-    }
-    .pokemon-card .num {
-      font-size: 11px;
-      color: var(--sub);
-      margin-bottom: 4px;
-    }
-    .pokemon-card .name {
-      font-size: 14px;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-    .pokemon-card .types {
-      display: flex;
-      justify-content: center;
-      gap: 4px;
-      flex-wrap: wrap;
-    }
+    .pokemon-card:hover { transform: translateY(-4px); box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
+    .pokemon-card img { width: 96px; height: 96px; image-rendering: pixelated; }
+    .pokemon-card .num { font-size: 11px; color: var(--sub); margin-bottom: 4px; }
+    .pokemon-card .name { font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+    .pokemon-card .types { display: flex; justify-content: center; gap: 4px; flex-wrap: wrap; }
+
     .type-badge {
-      font-size: 11px;
-      padding: 2px 8px;
-      border-radius: 20px;
-      color: #fff;
-      font-weight: 600;
+      font-size: 11px; padding: 2px 8px; border-radius: 20px;
+      color: #fff; font-weight: 600;
     }
 
-    /* 하트 버튼 */
     .heart-btn {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: none;
-      border: none;
-      font-size: 20px;
-      cursor: pointer;
-      line-height: 1;
-      transition: transform 0.1s;
+      position: absolute; top: 10px; right: 10px;
+      background: none; border: none; font-size: 20px; cursor: pointer;
+      line-height: 1; transition: transform 0.1s;
     }
     .heart-btn:hover { transform: scale(1.3); }
     .heart-btn.liked { color: var(--red); }
     .heart-btn:not(.liked) { color: #ddd; }
 
-    /* 빈 상태 - 메타몽 */
+    /* 빈 상태 */
     .empty-state {
       grid-column: 1 / -1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 80px 20px;
-      text-align: center;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 80px 20px; text-align: center;
     }
     .empty-state img {
-      width: 96px;
-      height: 96px;
-      image-rendering: pixelated;
+      width: 96px; height: 96px; image-rendering: pixelated;
       margin-bottom: 20px;
       animation: float 2s ease-in-out infinite;
     }
@@ -194,183 +119,141 @@
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-8px); }
     }
-    .empty-state p {
-      color: var(--sub);
-      font-size: 16px;
-      font-weight: 500;
+    .empty-state p { color: var(--sub); font-size: 16px; font-weight: 500; }
+
+    /* 몬스터볼 로딩 */
+    .ball-loader {
+      width: 50px; height: 50px;
+      border-radius: 50%;
+      background: linear-gradient(to bottom, #ff1111 0%, #ff1111 47%, #222 47%, #222 53%, #f5f5f5 53%, #f5f5f5 100%);
+      border: 3px solid #222;
+      position: relative;
+      margin: 0 auto;
+      animation: roll 1.2s ease-in-out infinite;
     }
+    .ball-loader::after {
+      content: '';
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 12px; height: 12px;
+      background: #fff; border: 3px solid #222; border-radius: 50%;
+    }
+    @keyframes roll {
+      0%   { transform: translateX(-40px) rotate(0deg); }
+      50%  { transform: translateX(40px) rotate(360deg); }
+      100% { transform: translateX(-40px) rotate(720deg); }
+    }
+    .loading-wrap {
+      grid-column: 1 / -1;
+      padding: 80px 20px; text-align: center;
+    }
+    .loading-wrap p { color: var(--sub); font-size: 15px; margin-top: 24px; font-weight: 500; }
 
     /* 모달 */
     .modal-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.6);
-      z-index: 100;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.6); z-index: 100;
+      align-items: center; justify-content: center; padding: 20px;
     }
     .modal-overlay.open { display: flex; }
     .modal-wrap {
-      position: relative;
-      width: 100%;
-      max-width: 420px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
+      position: relative; width: 100%; max-width: 420px;
+      display: flex; align-items: center; gap: 12px;
     }
     .modal {
-      background: #fff;
-      border-radius: 24px;
-      flex: 1;
-      overflow: hidden;
+      background: #fff; border-radius: 24px; flex: 1; overflow: hidden;
       box-shadow: 0 20px 60px rgba(0,0,0,0.3);
       animation: pop 0.2s ease;
     }
     @keyframes pop { from { transform: scale(0.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
     .modal-nav {
-      background: rgba(255,255,255,0.95);
-      border: none;
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      font-size: 22px;
-      cursor: pointer;
+      background: rgba(255,255,255,0.95); border: none;
+      width: 44px; height: 44px; border-radius: 50%;
+      font-size: 22px; cursor: pointer;
       box-shadow: 0 4px 12px rgba(0,0,0,0.2);
       transition: transform 0.15s, background 0.15s;
-      flex-shrink: 0;
-      color: var(--dark);
-      font-weight: 700;
+      flex-shrink: 0; color: var(--dark); font-weight: 700;
     }
-    .modal-nav:hover:not(:disabled) {
-      background: var(--red);
-      color: #fff;
-      transform: scale(1.1);
-    }
-    .modal-nav:disabled {
-      opacity: 0.3;
-      cursor: not-allowed;
-    }
+    .modal-nav:hover:not(:disabled) { background: var(--red); color: #fff; transform: scale(1.1); }
+    .modal-nav:disabled { opacity: 0.3; cursor: not-allowed; }
 
-    .modal-header {
-      padding: 28px 28px 16px;
-      text-align: center;
-    }
+    .modal-header { padding: 28px 28px 16px; text-align: center; }
     .modal-header img { width: 130px; height: 130px; image-rendering: pixelated; }
     .modal-header .modal-num { color: var(--sub); font-size: 13px; margin-bottom: 4px; }
     .modal-header .modal-name { font-size: 26px; font-weight: 900; }
     .modal-body { padding: 0 28px 28px; }
     .modal-types { display: flex; gap: 6px; justify-content: center; margin-bottom: 16px; }
     .stat-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 8px;
-      font-size: 14px;
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 8px; font-size: 14px;
     }
     .stat-label { width: 80px; color: var(--sub); flex-shrink: 0; }
     .stat-bar-wrap { flex: 1; background: #eee; border-radius: 10px; height: 8px; overflow: hidden; }
     .stat-bar { height: 100%; border-radius: 10px; background: var(--red); }
     .stat-val { width: 32px; text-align: right; font-weight: 700; font-size: 13px; }
-    .info-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin: 16px 0;
-    }
-    .info-item {
-      background: var(--gray);
-      border-radius: 10px;
-      padding: 10px;
-      text-align: center;
-    }
+    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 16px 0; }
+    .info-item { background: var(--gray); border-radius: 10px; padding: 10px; text-align: center; }
     .info-item .val { font-size: 18px; font-weight: 700; }
     .info-item .lbl { font-size: 11px; color: var(--sub); margin-top: 2px; }
     .modal-close {
-      display: block;
-      width: 100%;
-      padding: 12px;
-      background: var(--red);
-      color: #fff;
-      border: none;
-      font-size: 16px;
-      font-weight: 700;
-      cursor: pointer;
-      border-radius: 12px;
-      margin-top: 16px;
-      font-family: inherit;
+      display: block; width: 100%; padding: 12px;
+      background: var(--red); color: #fff; border: none;
+      font-size: 16px; font-weight: 700; cursor: pointer;
+      border-radius: 12px; margin-top: 16px; font-family: inherit;
     }
     .modal-close:hover { background: #cc0000; }
 
-    /* 퀴즈 탭 */
-    .quiz-wrap {
-      max-width: 520px;
-      margin: 40px auto;
-      padding: 0 20px;
-    }
+    /* 퀴즈 */
+    .quiz-wrap { max-width: 520px; margin: 40px auto; padding: 0 20px; }
     .quiz-card {
-      background: #fff;
-      border-radius: 24px;
-      padding: 32px;
-      text-align: center;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      background: #fff; border-radius: 24px; padding: 32px;
+      text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.1);
     }
     .quiz-card h2 { font-size: 20px; color: var(--sub); margin-bottom: 24px; font-weight: 700; }
+
     .quiz-img-wrap {
-      width: 200px;
-      height: 200px;
-      margin: 0 auto 24px;
-      position: relative;
+      width: 200px; height: 200px;
+      margin: 0 auto 24px; position: relative;
+      overflow: hidden; border-radius: 16px;
     }
     .quiz-img-wrap img {
-      width: 100%;
-      height: 100%;
-      image-rendering: pixelated;
+      width: 100%; height: 100%; image-rendering: pixelated;
+      transition: filter 0.3s;
     }
     .quiz-img-wrap img.silhouette { filter: brightness(0); }
-    .quiz-options {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 20px;
+    .quiz-img-wrap.zoomed img { transform: scale(2.5); transform-origin: var(--zoom-x, 50%) var(--zoom-y, 50%); }
+    .quiz-img-wrap.zoomed.revealed img { transform: scale(1); transform-origin: 50% 50%; }
+
+    .quiz-type-badge {
+      display: inline-block;
+      font-size: 12px; padding: 4px 12px; border-radius: 20px;
+      background: #eef0ff; color: var(--blue);
+      font-weight: 700; margin-bottom: 12px;
     }
+
+    .quiz-options { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
     .quiz-option {
-      padding: 14px;
-      border: 2px solid #ddd;
-      border-radius: 12px;
-      background: #fff;
-      font-size: 15px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.15s;
-      font-family: inherit;
+      padding: 14px; border: 2px solid #ddd; border-radius: 12px; background: #fff;
+      font-size: 15px; font-weight: 600; cursor: pointer;
+      transition: all 0.15s; font-family: inherit;
     }
     .quiz-option:hover:not(:disabled) { border-color: var(--blue); background: #eef0ff; }
     .quiz-option.correct { border-color: #22c55e; background: #f0fdf4; color: #16a34a; }
     .quiz-option.wrong { border-color: var(--red); background: #fff1f1; color: var(--red); }
     .quiz-option:disabled { cursor: default; }
+
     .quiz-result { font-size: 20px; font-weight: 700; margin-bottom: 8px; min-height: 32px; }
     .quiz-result.correct-text { color: #16a34a; }
     .quiz-result.wrong-text { color: var(--red); }
+
     .quiz-next-btn, .quiz-start-btn {
-      padding: 12px 32px;
-      background: var(--red);
-      color: #fff;
-      border: none;
-      border-radius: 12px;
-      font-size: 16px;
-      font-weight: 700;
-      cursor: pointer;
-      font-family: inherit;
+      padding: 12px 32px; background: var(--red); color: #fff; border: none;
+      border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; font-family: inherit;
     }
     .quiz-start-btn {
-      background: var(--blue);
-      padding: 14px 40px;
-      font-size: 18px;
-      border-radius: 14px;
-      margin-top: 16px;
+      background: var(--blue); padding: 14px 40px;
+      font-size: 18px; border-radius: 14px; margin-top: 16px;
     }
     .quiz-next-btn { display: none; }
     .quiz-next-btn:hover { background: #cc0000; }
@@ -378,47 +261,43 @@
 
     /* 레벨 / 포켓볼 */
     .level-board {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      background: linear-gradient(135deg, #f8f9ff 0%, #fff5f5 100%);
-      padding: 14px 18px;
-      border-radius: 16px;
-      margin-bottom: 20px;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px; background: linear-gradient(135deg, #f8f9ff 0%, #fff5f5 100%);
+      padding: 14px 18px; border-radius: 16px; margin-bottom: 20px;
     }
-    .level-info {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .level-info .level-text {
-      text-align: left;
-    }
+    .level-info { display: flex; align-items: center; gap: 10px; }
+    .level-info .level-text { text-align: left; }
     .level-info .lv-name { font-size: 15px; font-weight: 800; color: var(--dark); }
     .level-info .lv-progress { font-size: 11px; color: var(--sub); margin-top: 2px; }
     .score-text { font-size: 13px; color: var(--sub); font-weight: 600; }
 
     .pokeball {
-      width: 32px; height: 32px;
-      border-radius: 50%;
+      width: 32px; height: 32px; border-radius: 50%;
       background: linear-gradient(to bottom, var(--ball-top, #ff1111) 0%, var(--ball-top, #ff1111) 47%, #222 47%, #222 53%, #f5f5f5 53%, #f5f5f5 100%);
       border: 2px solid #222;
-      position: relative;
-      flex-shrink: 0;
+      position: relative; flex-shrink: 0;
       box-shadow: 0 2px 6px rgba(0,0,0,0.15);
     }
     .pokeball::after {
       content: '';
-      position: absolute;
-      top: 50%; left: 50%;
+      position: absolute; top: 50%; left: 50%;
       transform: translate(-50%, -50%);
       width: 9px; height: 9px;
-      background: #fff;
-      border: 2px solid #222;
-      border-radius: 50%;
+      background: #fff; border: 2px solid #222; border-radius: 50%;
     }
-    .pokeball.great { --ball-top: #2a75bb; }
+    .pokeball.love {
+      background: linear-gradient(to bottom, #FF85B3 0%, #FF85B3 47%, #222 47%, #222 53%, #FFE6F0 53%, #FFE6F0 100%);
+    }
+    .pokeball.love::before {
+      content: '♥';
+      position: absolute; top: 4px; left: 50%;
+      transform: translateX(-50%);
+      font-size: 9px; color: #fff; z-index: 1;
+    }
+    .pokeball.great { --ball-top: #2A75BB; }
+    .pokeball.dive {
+      background: linear-gradient(to bottom, #4FC3F7 0%, #4FC3F7 47%, #222 47%, #222 53%, #E1F5FE 53%, #E1F5FE 100%);
+    }
     .pokeball.ultra {
       background: linear-gradient(to bottom, #2a2a2a 0%, #2a2a2a 30%, #f7d02c 30%, #f7d02c 47%, #222 47%, #222 53%, #f5f5f5 53%, #f5f5f5 100%);
     }
@@ -427,22 +306,9 @@
     }
     .pokeball.master::before {
       content: 'M';
-      position: absolute;
-      top: 4px; left: 50%;
+      position: absolute; top: 4px; left: 50%;
       transform: translateX(-50%);
-      font-size: 9px;
-      color: #ff69b4;
-      font-weight: 900;
-      z-index: 1;
-    }
-
-    .quiz-loading {
-      padding: 40px 0;
-      color: var(--sub);
-    }
-    .quiz-loading img {
-      width: 80px; height: 80px;
-      image-rendering: pixelated;
+      font-size: 9px; color: #ff69b4; font-weight: 900; z-index: 1;
     }
 
     @media (max-width: 480px) {
@@ -451,6 +317,14 @@
       .modal-wrap { gap: 6px; }
       .modal-nav { width: 36px; height: 36px; font-size: 18px; }
     }
+
+    /* 타입 색상 */
+    .t-normal{background:#A8A878} .t-fire{background:#F08030} .t-water{background:#6890F0}
+    .t-electric{background:#F8D030} .t-grass{background:#78C850} .t-ice{background:#98D8D8}
+    .t-fighting{background:#C03028} .t-poison{background:#A040A0} .t-ground{background:#E0C068}
+    .t-flying{background:#A890F0} .t-psychic{background:#F85888} .t-bug{background:#A8B820}
+    .t-rock{background:#B8A038} .t-ghost{background:#705898} .t-dragon{background:#7038F8}
+    .t-dark{background:#705848} .t-steel{background:#B8B8D0} .t-fairy{background:#EE99AC}
   </style>
 </head>
 <body>
@@ -490,7 +364,7 @@
   </div>
 </div>
 
-<!-- 즐겨찾기 탭 -->
+<!-- 좋아하는 포켓몬 탭 -->
 <div id="tab-favorites" class="tab-panel">
   <div id="fav-grid" class="grid"></div>
 </div>
@@ -503,8 +377,8 @@
       <div style="display:flex;justify-content:center;margin-bottom:20px">
         <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/959.gif" alt="두드리짱" style="width:120px;height:120px;image-rendering:pixelated;animation:float 2s ease-in-out infinite" />
       </div>
-      <p style="color:var(--sub);margin-bottom:8px">실루엣을 보고 포켓몬 이름을 맞혀보세요!</p>
-      <p style="color:var(--sub);font-size:13px;margin-bottom:8px">1~9세대 전체에서 무작위로 출제됩니다.</p>
+      <p style="color:var(--sub);margin-bottom:8px">3가지 유형의 문제가 무작위로 출제돼요!</p>
+      <p style="color:var(--sub);font-size:13px;margin-bottom:8px">실루엣 · 확대샷 · 타입 맞히기</p>
       <div id="start-level-display" style="margin:20px 0"></div>
       <button class="quiz-start-btn" onclick="startQuiz()">퀴즈 시작!</button>
     </div>
@@ -514,20 +388,21 @@
           <div id="play-pokeball" class="pokeball"></div>
           <div class="level-text">
             <div class="lv-name" id="play-lv-name">몬스터볼</div>
-            <div class="lv-progress" id="play-lv-progress">0 / 5</div>
+            <div class="lv-progress" id="play-lv-progress">0 / 4</div>
           </div>
         </div>
         <div class="score-text">이번 세션: <span id="q-score">0</span>/<span id="q-total">0</span></div>
       </div>
-      <div id="quiz-loading" class="quiz-loading">
-        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/959.gif" alt="로딩중" />
-        <p style="margin-top:8px;font-size:14px">문제를 가져오는 중...</p>
+      <div id="quiz-loading" class="loading-wrap" style="padding:40px 20px">
+        <div class="ball-loader"></div>
+        <p>문제를 가져오는 중...</p>
       </div>
       <div id="quiz-content" style="display:none">
-        <div class="quiz-img-wrap">
-          <img id="quiz-img" src="" alt="" class="silhouette" />
+        <div class="quiz-type-badge" id="quiz-type-label"></div>
+        <div class="quiz-img-wrap" id="quiz-img-wrap">
+          <img id="quiz-img" src="" alt="" />
         </div>
-        <h2 style="margin-bottom:16px">이 포켓몬은 누구?</h2>
+        <h2 id="quiz-question" style="margin-bottom:16px">이 포켓몬은 누구?</h2>
         <div class="quiz-options" id="quiz-options"></div>
         <div class="quiz-result" id="quiz-result"></div>
         <button class="quiz-next-btn" id="quiz-next" onclick="nextQuestion()">다음 문제 →</button>
@@ -549,14 +424,8 @@
       </div>
       <div class="modal-body">
         <div class="info-grid">
-          <div class="info-item">
-            <div class="val" id="modal-height"></div>
-            <div class="lbl">키</div>
-          </div>
-          <div class="info-item">
-            <div class="val" id="modal-weight"></div>
-            <div class="lbl">몸무게</div>
-          </div>
+          <div class="info-item"><div class="val" id="modal-height"></div><div class="lbl">키</div></div>
+          <div class="info-item"><div class="val" id="modal-weight"></div><div class="lbl">몸무게</div></div>
         </div>
         <div id="modal-stats"></div>
         <button class="modal-close" onclick="closeModalBtn()">닫기</button>
@@ -585,34 +454,42 @@ const TYPE_KO = {
   psychic:'에스퍼', bug:'벌레', rock:'바위', ghost:'고스트', dragon:'드래곤',
   dark:'악', steel:'강철', fairy:'페어리'
 };
+const ALL_TYPES = Object.keys(TYPE_KO);
 
 const STAT_KO = {
   hp:'HP', attack:'공격', defense:'방어',
   'special-attack':'특수공격', 'special-defense':'특수방어', speed:'스피드'
 };
-
 const STAT_MAX = { hp:255, attack:190, defense:230, 'special-attack':194, 'special-defense':230, speed:200 };
 
-// 레벨 단계
+// 레벨 단계 (색감 순: 빨강→분홍→파랑→하늘→노랑+검정→보라)
 const LEVELS = [
-  { name: '몬스터볼', class: '',       min: 0,  next: 5  },
-  { name: '슈퍼볼',   class: 'great',  min: 5,  next: 15 },
-  { name: '하이퍼볼', class: 'ultra',  min: 15, next: 30 },
-  { name: '마스터볼', class: 'master', min: 30, next: Infinity }
+  { name: '몬스터볼', class: '',       min: 0,  next: 4  },
+  { name: '러브볼',   class: 'love',   min: 4,  next: 10 },
+  { name: '슈퍼볼',   class: 'great',  min: 10, next: 18 },
+  { name: '다이브볼', class: 'dive',   min: 18, next: 28 },
+  { name: '하이퍼볼', class: 'ultra',  min: 28, next: 41 },
+  { name: '마스터볼', class: 'master', min: 41, next: Infinity }
 ];
 
 // 상태
-let currentPokemon = [];   // 도감 현재 세대
-let displayedPokemon = []; // 모달 네비게이션용 (검색 필터 반영)
+let currentPokemon = [];
+let displayedPokemon = [];
 let currentModalIndex = -1;
 let favorites = JSON.parse(localStorage.getItem('poke-favs') || '[]');
 let totalCorrect = parseInt(localStorage.getItem('poke-total-correct') || '0');
-let pokemonCache = {};   // id → pokemon 객체 캐시
+let pokemonCache = {};
 let quizScore = 0;
 let quizTotal = 0;
 let currentQuestion = null;
+let currentQuizType = null;
 
-// ── 탭 전환 ─────────────────────────────────────────
+// 로딩 HTML
+function loaderHTML(msg) {
+  return `<div class="loading-wrap"><div class="ball-loader"></div><p>${msg}</p></div>`;
+}
+
+// 탭 전환
 function switchTab(e, tab) {
   document.querySelectorAll('.tab-panel').forEach(el => el.classList.remove('active'));
   document.querySelectorAll('nav button').forEach(el => el.classList.remove('active'));
@@ -622,16 +499,13 @@ function switchTab(e, tab) {
   if (tab === 'quiz') updateStartLevelDisplay();
 }
 
-// ── 세대 선택 ────────────────────────────────────────
+// 세대 선택
 async function onGenChange() {
   const gen = document.getElementById('gen-select').value;
   if (!gen) return;
   const { start, end } = GENERATIONS[gen];
   const grid = document.getElementById('dex-grid');
-  grid.innerHTML = `<div class="empty-state">
-    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/700.gif" alt="님피아" />
-    <p>포켓몬을 불러오는 중... (${end - start + 1}마리)</p>
-  </div>`;
+  grid.innerHTML = loaderHTML(`포켓몬을 불러오는 중... (${end - start + 1}마리)`);
   document.getElementById('search-input').value = '';
 
   const ids = Array.from({ length: end - start + 1 }, (_, i) => start + i);
@@ -639,7 +513,7 @@ async function onGenChange() {
   renderGrid(currentPokemon);
 }
 
-// ── API 호출 (캐시 적용) ─────────────────────────────
+// API
 async function fetchPokemon(id) {
   if (pokemonCache[id]) return pokemonCache[id];
   const [base, species] = await Promise.all([
@@ -660,7 +534,7 @@ async function fetchPokemon(id) {
   return data;
 }
 
-// ── 카드 렌더 ────────────────────────────────────────
+// 카드
 function renderGrid(list) {
   const grid = document.getElementById('dex-grid');
   if (!list.length) {
@@ -679,7 +553,7 @@ function cardHTML(p) {
     <div class="pokemon-card" onclick="openModalById(${p.id}, 'dex')">
       <button class="heart-btn ${isFav ? 'liked' : ''}"
         onclick="toggleFav(event, ${p.id})"
-        title="${isFav ? '즐겨찾기 해제' : '즐겨찾기 추가'}">♥</button>
+        title="${isFav ? '좋아요 해제' : '좋아요'}">♥</button>
       <div class="num">#${String(p.id).padStart(4,'0')}</div>
       <img src="${p.img}" alt="${p.name}" loading="lazy" />
       <div class="name">${p.name}</div>
@@ -689,25 +563,14 @@ function cardHTML(p) {
     </div>`;
 }
 
-// 타입별 색상
-const typeStyle = document.createElement('style');
-typeStyle.textContent = `
-  .t-normal{background:#A8A878} .t-fire{background:#F08030} .t-water{background:#6890F0}
-  .t-electric{background:#F8D030} .t-grass{background:#78C850} .t-ice{background:#98D8D8}
-  .t-fighting{background:#C03028} .t-poison{background:#A040A0} .t-ground{background:#E0C068}
-  .t-flying{background:#A890F0} .t-psychic{background:#F85888} .t-bug{background:#A8B820}
-  .t-rock{background:#B8A038} .t-ghost{background:#705898} .t-dragon{background:#7038F8}
-  .t-dark{background:#705848} .t-steel{background:#B8B8D0} .t-fairy{background:#EE99AC}`;
-document.head.appendChild(typeStyle);
-
-// ── 검색 필터 ────────────────────────────────────────
+// 검색
 function filterCards() {
   const q = document.getElementById('search-input').value.trim();
   const filtered = q ? currentPokemon.filter(p => p.name.includes(q)) : currentPokemon;
   renderGrid(filtered);
 }
 
-// ── 즐겨찾기 ─────────────────────────────────────────
+// 좋아하는 포켓몬
 function toggleFav(e, id) {
   e.stopPropagation();
   if (favorites.includes(id)) favorites = favorites.filter(f => f !== id);
@@ -725,10 +588,7 @@ async function renderFavorites() {
     </div>`;
     return;
   }
-  grid.innerHTML = `<div class="empty-state">
-    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/132.gif" alt="메타몽" />
-    <p>불러오는 중...</p>
-  </div>`;
+  grid.innerHTML = loaderHTML('불러오는 중...');
   const list = await Promise.all(favorites.map(fetchPokemon));
   grid.innerHTML = list.map(p => cardHTMLFav(p)).join('');
 }
@@ -736,8 +596,7 @@ async function renderFavorites() {
 function cardHTMLFav(p) {
   return `
     <div class="pokemon-card" onclick="openModalById(${p.id}, 'fav')">
-      <button class="heart-btn liked"
-        onclick="toggleFavInFav(event, ${p.id})">♥</button>
+      <button class="heart-btn liked" onclick="toggleFavInFav(event, ${p.id})">♥</button>
       <div class="num">#${String(p.id).padStart(4,'0')}</div>
       <img src="${p.img}" alt="${p.name}" loading="lazy" />
       <div class="name">${p.name}</div>
@@ -754,9 +613,8 @@ function toggleFavInFav(e, id) {
   renderFavorites();
 }
 
-// ── 상세 모달 (네비게이션) ───────────────────────────
+// 모달
 async function openModalById(id, context) {
-  // context: 'dex' (현재 세대 내에서 이동) 또는 'fav' (즐겨찾기 내에서 이동)
   if (context === 'dex') {
     const q = document.getElementById('search-input').value.trim();
     displayedPokemon = q ? currentPokemon.filter(p => p.name.includes(q)) : currentPokemon;
@@ -801,7 +659,6 @@ function navigateModal(direction) {
 function closeModal(e) { if (e.target === e.currentTarget) closeModalBtn(); }
 function closeModalBtn() { document.getElementById('modal-overlay').classList.remove('open'); }
 
-// 키보드 네비게이션
 document.addEventListener('keydown', (e) => {
   const overlay = document.getElementById('modal-overlay');
   if (!overlay.classList.contains('open')) return;
@@ -810,7 +667,7 @@ document.addEventListener('keydown', (e) => {
   else if (e.key === 'Escape') closeModalBtn();
 });
 
-// ── 레벨 ─────────────────────────────────────────────
+// 레벨
 function getLevel(score) {
   for (let i = LEVELS.length - 1; i >= 0; i--) {
     if (score >= LEVELS[i].min) return { ...LEVELS[i], idx: i };
@@ -824,7 +681,7 @@ function updateStartLevelDisplay() {
     ? '최고 레벨!'
     : `다음 레벨까지 ${lv.next - totalCorrect}문제`;
   document.getElementById('start-level-display').innerHTML = `
-    <div class="level-board" style="max-width:280px;margin:0 auto">
+    <div class="level-board" style="max-width:300px;margin:0 auto">
       <div class="level-info">
         <div class="pokeball ${lv.class}"></div>
         <div class="level-text">
@@ -840,19 +697,26 @@ function updateLevelBoard() {
   const ball = document.getElementById('play-pokeball');
   ball.className = `pokeball ${lv.class}`;
   document.getElementById('play-lv-name').textContent = lv.name;
-  const progressText = lv.next === Infinity
+  document.getElementById('play-lv-progress').textContent = lv.next === Infinity
     ? `누적 ${totalCorrect}개 (MAX)`
     : `${totalCorrect} / ${lv.next}`;
-  document.getElementById('play-lv-progress').textContent = progressText;
 }
 
-// ── 퀴즈 ──────────────────────────────────────────────
+// 퀴즈
 function startQuiz() {
   quizScore = 0;
   quizTotal = 0;
   document.getElementById('quiz-start-screen').style.display = 'none';
   document.getElementById('quiz-play-screen').style.display = 'block';
   nextQuestion();
+}
+
+function getRandomIds(n) {
+  const ids = new Set();
+  while (ids.size < n) {
+    ids.add(Math.floor(Math.random() * 1025) + 1);
+  }
+  return [...ids];
 }
 
 async function nextQuestion() {
@@ -863,40 +727,111 @@ async function nextQuestion() {
   updateLevelBoard();
   updateScore();
 
-  // 1~1025에서 랜덤 4개
-  const ids = new Set();
-  while (ids.size < 4) {
-    ids.add(Math.floor(Math.random() * 1025) + 1);
+  // 3가지 유형 중 무작위 선택
+  const quizTypes = ['silhouette', 'zoomed', 'type'];
+  currentQuizType = quizTypes[Math.floor(Math.random() * quizTypes.length)];
+
+  if (currentQuizType === 'silhouette' || currentQuizType === 'zoomed') {
+    const ids = getRandomIds(4);
+    const fetched = await Promise.all(ids.map(fetchPokemon));
+    currentQuestion = fetched[Math.floor(Math.random() * 4)];
+    const options = [...fetched].sort(() => Math.random() - 0.5);
+    renderImageQuiz(options);
+  } else if (currentQuizType === 'type') {
+    const id = getRandomIds(1)[0];
+    currentQuestion = await fetchPokemon(id);
+    renderTypeQuiz();
   }
-  const fetched = await Promise.all([...ids].map(fetchPokemon));
-  currentQuestion = fetched[Math.floor(Math.random() * 4)];
-  const options = [...fetched].sort(() => Math.random() - 0.5);
-
-  const img = document.getElementById('quiz-img');
-  img.src = currentQuestion.img;
-  img.className = 'silhouette';
-
-  document.getElementById('quiz-options').innerHTML = options.map(p =>
-    `<button class="quiz-option" onclick="checkAnswer(${p.id})">${p.name}</button>`
-  ).join('');
 
   document.getElementById('quiz-loading').style.display = 'none';
   document.getElementById('quiz-content').style.display = 'block';
 }
 
-function checkAnswer(id) {
+function renderImageQuiz(options) {
+  const wrap = document.getElementById('quiz-img-wrap');
+  const img = document.getElementById('quiz-img');
+
+  if (currentQuizType === 'silhouette') {
+    document.getElementById('quiz-type-label').textContent = '🌑 실루엣 퀴즈';
+    document.getElementById('quiz-question').textContent = '이 포켓몬은 누구?';
+    wrap.className = 'quiz-img-wrap';
+    img.className = 'silhouette';
+  } else {
+    document.getElementById('quiz-type-label').textContent = '🔍 확대샷 퀴즈';
+    document.getElementById('quiz-question').textContent = '이 포켓몬은 누구?';
+    // 무작위 위치 확대
+    const x = 30 + Math.random() * 40;
+    const y = 30 + Math.random() * 40;
+    wrap.style.setProperty('--zoom-x', `${x}%`);
+    wrap.style.setProperty('--zoom-y', `${y}%`);
+    wrap.className = 'quiz-img-wrap zoomed';
+    img.className = '';
+  }
+
+  img.src = currentQuestion.img;
+
+  document.getElementById('quiz-options').innerHTML = options.map(p =>
+    `<button class="quiz-option" data-id="${p.id}" onclick="checkAnswer(${p.id}, '${p.name}')">${p.name}</button>`
+  ).join('');
+}
+
+function renderTypeQuiz() {
+  document.getElementById('quiz-type-label').textContent = '🏷️ 타입 맞히기';
+  document.getElementById('quiz-question').textContent = '이 포켓몬의 타입은?';
+
+  const wrap = document.getElementById('quiz-img-wrap');
+  const img = document.getElementById('quiz-img');
+  wrap.className = 'quiz-img-wrap';
+  img.className = '';
+  img.src = currentQuestion.img;
+
+  const correctType = currentQuestion.types[0];
+  const wrongTypes = ALL_TYPES
+    .filter(t => !currentQuestion.types.includes(t))
+    .sort(() => Math.random() - 0.5)
+    .slice(0, 3);
+  const options = [correctType, ...wrongTypes].sort(() => Math.random() - 0.5);
+
+  document.getElementById('quiz-options').innerHTML = options.map(t =>
+    `<button class="quiz-option" data-type="${t}" onclick="checkTypeAnswer('${t}')">
+      <span class="type-badge t-${t}" style="margin-right:6px">${TYPE_KO[t]}</span>
+    </button>`
+  ).join('');
+}
+
+function checkAnswer(id, name) {
   document.querySelectorAll('.quiz-option').forEach(btn => {
     btn.disabled = true;
-    if (btn.textContent === currentQuestion.name) btn.classList.add('correct');
-    else if (btn.textContent === pokemonCache[id]?.name) btn.classList.add('wrong');
+    const btnId = parseInt(btn.dataset.id);
+    if (btnId === currentQuestion.id) btn.classList.add('correct');
+    else if (btnId === id) btn.classList.add('wrong');
   });
 
-  document.getElementById('quiz-img').className = '';
+  // 실루엣/확대 풀어서 정답 보여주기
+  const wrap = document.getElementById('quiz-img-wrap');
+  const img = document.getElementById('quiz-img');
+  if (currentQuizType === 'silhouette') img.className = '';
+  if (currentQuizType === 'zoomed') wrap.classList.add('revealed');
+
+  scoreAnswer(id === currentQuestion.id, currentQuestion.name);
+}
+
+function checkTypeAnswer(type) {
+  const correctType = currentQuestion.types[0];
+  document.querySelectorAll('.quiz-option').forEach(btn => {
+    btn.disabled = true;
+    if (btn.dataset.type === correctType) btn.classList.add('correct');
+    else if (btn.dataset.type === type) btn.classList.add('wrong');
+  });
+  scoreAnswer(type === correctType, `${currentQuestion.name}의 타입은 ${TYPE_KO[correctType]}`);
+}
+
+function scoreAnswer(isCorrect, correctText) {
   quizTotal++;
   const result = document.getElementById('quiz-result');
   const prevLevel = getLevel(totalCorrect);
 
-  if (id === currentQuestion.id) {
+  if (isCorrect) {
     quizScore++;
     totalCorrect++;
     localStorage.setItem('poke-total-correct', String(totalCorrect));
@@ -908,7 +843,7 @@ function checkAnswer(id) {
     }
     result.className = 'quiz-result correct-text';
   } else {
-    result.textContent = `오답! 정답은 ${currentQuestion.name}이에요.`;
+    result.textContent = `오답! 정답은 ${correctText}이에요.`;
     result.className = 'quiz-result wrong-text';
   }
   document.getElementById('quiz-next').style.display = 'inline-block';
