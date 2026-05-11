@@ -246,6 +246,44 @@
     }
     .modal-close:hover { background: #cc0000; }
 
+    /* 도감 설명 */
+    .flavor-section {
+      margin-top: 18px;
+      padding-top: 18px;
+      border-top: 1px solid #eee;
+    }
+    .flavor-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--sub);
+      margin-bottom: 10px;
+      letter-spacing: 0.3px;
+    }
+    .flavor-list {
+      display: flex; flex-direction: column; gap: 10px;
+      max-height: 240px; overflow-y: auto;
+      padding-right: 4px;
+    }
+    .flavor-list::-webkit-scrollbar { width: 6px; }
+    .flavor-list::-webkit-scrollbar-thumb { background: #ddd; border-radius: 3px; }
+    .flavor-item {
+      background: var(--gray);
+      border-radius: 10px;
+      padding: 10px 12px;
+    }
+    .flavor-versions {
+      display: flex; flex-wrap: wrap; gap: 4px;
+      margin-bottom: 6px;
+    }
+    .flavor-version-badge {
+      font-size: 10px; padding: 2px 8px;
+      border-radius: 20px; background: #fff;
+      color: var(--sub); font-weight: 700;
+      border: 1px solid #ddd;
+    }
+    .flavor-text { font-size: 13px; line-height: 1.5; color: var(--text); }
+    .flavor-loading { color: var(--sub); font-size: 13px; text-align: center; padding: 12px; }
+
     /* 퀴즈 */
     .quiz-wrap { max-width: 520px; margin: 40px auto; padding: 0 20px; }
     .quiz-card {
@@ -469,6 +507,7 @@
           <div class="info-item"><div class="val" id="modal-weight"></div><div class="lbl">몸무게</div></div>
         </div>
         <div id="modal-stats"></div>
+        <div id="modal-flavor"></div>
         <button class="modal-close" onclick="closeModalBtn()">닫기</button>
       </div>
     </div>
@@ -503,6 +542,25 @@ const STAT_KO = {
 };
 const STAT_MAX = { hp:255, attack:190, defense:230, 'special-attack':194, 'special-defense':230, speed:200 };
 
+// 게임 버전 한국어 매핑
+const VERSION_KO = {
+  red:'레드', blue:'블루', yellow:'옐로',
+  gold:'골드', silver:'실버', crystal:'크리스탈',
+  ruby:'루비', sapphire:'사파이어', emerald:'에메랄드',
+  'firered':'파이어레드', 'leafgreen':'리프그린',
+  diamond:'다이아몬드', pearl:'펄', platinum:'플래티넘',
+  heartgold:'하트골드', soulsilver:'소울실버',
+  black:'블랙', white:'화이트', 'black-2':'블랙2', 'white-2':'화이트2',
+  x:'X', y:'Y',
+  'omega-ruby':'오메가루비', 'alpha-sapphire':'알파사파이어',
+  sun:'썬', moon:'문', 'ultra-sun':'울트라썬', 'ultra-moon':'울트라문',
+  "lets-go-pikachu":'레츠고 피카츄', "lets-go-eevee":'레츠고 이브이',
+  sword:'소드', shield:'실드',
+  'legends-arceus':'레전드 아르세우스',
+  'brilliant-diamond':'빛나는 다이아몬드', 'shining-pearl':'샤이닝 펄',
+  scarlet:'스칼렛', violet:'바이올렛'
+};
+
 // 레벨 단계 (색감 순: 빨강→분홍→파랑→하늘→노랑+검정→보라)
 const LEVELS = [
   { name: '몬스터볼', class: '',       min: 0,  next: 4  },
@@ -520,6 +578,7 @@ let currentModalIndex = -1;
 let favorites = JSON.parse(localStorage.getItem('poke-favs') || '[]');
 let totalCorrect = parseInt(localStorage.getItem('poke-total-correct') || '0');
 let pokemonCache = {};
+let speciesCache = {};
 let quizScore = 0;
 let quizTotal = 0;
 let currentQuestion = null;
@@ -710,6 +769,61 @@ async function showModalAt(idx) {
   document.getElementById('modal-overlay').classList.add('open');
   document.getElementById('prev-btn').disabled = idx === 0;
   document.getElementById('next-btn').disabled = idx === displayedPokemon.length - 1;
+  loadFlavorText(p.id);
+}
+
+// 도감 설명 로드
+async function fetchSpecies(id) {
+  if (speciesCache[id]) return speciesCache[id];
+  const data = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${id}`).then(r => r.json());
+  speciesCache[id] = data;
+  return data;
+}
+
+function dedupFlavors(entries) {
+  const koEntries = entries.filter(e => e.language.name === 'ko');
+  const seen = new Map();
+  koEntries.forEach(e => {
+    const text = e.flavor_text.replace(/[\n\f\r]/g, ' ').replace(/\s+/g, ' ').trim();
+    if (!seen.has(text)) seen.set(text, []);
+    seen.get(text).push(e.version.name);
+  });
+  return Array.from(seen.entries()).map(([text, versions]) => ({ text, versions }));
+}
+
+async function loadFlavorText(id) {
+  const box = document.getElementById('modal-flavor');
+  const requestId = id;
+  box.innerHTML = `<div class="flavor-section">
+    <div class="flavor-title">📖 도감 설명</div>
+    <div class="flavor-loading">불러오는 중...</div>
+  </div>`;
+  try {
+    const species = await fetchSpecies(id);
+    if (displayedPokemon[currentModalIndex]?.id !== requestId) return;
+    const flavors = dedupFlavors(species.flavor_text_entries);
+    if (!flavors.length) {
+      box.innerHTML = `<div class="flavor-section">
+        <div class="flavor-title">📖 도감 설명</div>
+        <div class="flavor-loading">한국어 도감 설명이 없어요.</div>
+      </div>`;
+      return;
+    }
+    box.innerHTML = `<div class="flavor-section">
+      <div class="flavor-title">📖 도감 설명 (${flavors.length}종)</div>
+      <div class="flavor-list">
+        ${flavors.map(f => `
+          <div class="flavor-item">
+            <div class="flavor-versions">
+              ${f.versions.map(v => `<span class="flavor-version-badge">${VERSION_KO[v] || v}</span>`).join('')}
+            </div>
+            <div class="flavor-text">${f.text}</div>
+          </div>`).join('')}
+      </div>
+    </div>`;
+  } catch (e) {
+    box.innerHTML = '';
+  }
 }
 
 function navigateModal(direction) {
