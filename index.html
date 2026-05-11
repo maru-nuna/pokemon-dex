@@ -30,19 +30,19 @@
     }
 
     header {
-      background: #fff;
+      background: var(--dark);
       padding: 20px 28px;
       display: flex;
       align-items: center;
       gap: 12px;
-      border-bottom: 1px solid #eee;
+      border-bottom: 3px solid var(--yellow);
     }
     header .logo {
       font-family: 'Onest', sans-serif;
       font-size: 28px;
       font-weight: 900;
       letter-spacing: -1.5px;
-      background: linear-gradient(135deg, #FF1111 0%, #FFB800 50%, #3B4CCA 100%);
+      background: linear-gradient(135deg, #FFDE00 0%, #FFB800 50%, #FF1111 100%);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
@@ -61,17 +61,59 @@
     .tab-panel.active { display: block; }
 
     .filter-bar {
-      background: #fff; padding: 16px 24px; display: flex; gap: 12px;
-      align-items: center; flex-wrap: wrap; border-bottom: 1px solid #e0e0e0;
+      background: #fff; padding: 16px 24px;
+      display: flex; flex-direction: column; gap: 12px;
+      border-bottom: 1px solid #e0e0e0;
       position: sticky; top: 0; z-index: 10;
     }
-    .filter-bar select, .filter-bar input {
+    .filter-bar input {
       padding: 9px 14px; border: 2px solid #ddd; border-radius: 10px;
       font-size: 14px; outline: none; transition: border 0.2s; background: #fff; font-family: inherit;
+      width: 240px; max-width: 100%;
     }
-    .filter-bar select:focus, .filter-bar input:focus { border-color: var(--red); }
-    .filter-bar input { flex: 1; min-width: 180px; }
-    .filter-bar select { cursor: pointer; }
+    .filter-bar input:focus { border-color: var(--red); }
+
+    .gen-chips {
+      display: flex; flex-wrap: wrap; gap: 8px;
+    }
+    .gen-chip {
+      padding: 7px 14px;
+      border: 2px solid var(--chip, #e0e0e0);
+      border-radius: 999px;
+      background: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--chip, var(--text));
+      cursor: pointer;
+      transition: all 0.15s;
+      font-family: inherit;
+      white-space: nowrap;
+    }
+    .gen-chip:hover {
+      background: color-mix(in srgb, var(--chip) 12%, white);
+      transform: translateY(-1px);
+    }
+    .gen-chip.active {
+      background: var(--chip);
+      color: #fff;
+      box-shadow: 0 4px 12px color-mix(in srgb, var(--chip) 40%, transparent);
+    }
+    .gen-chip .region {
+      font-size: 11px;
+      opacity: 0.75;
+      margin-left: 4px;
+      font-weight: 600;
+    }
+    /* 세대별 컬러 (각 시리즈 대표색) */
+    .gen-chip[data-gen="1"] { --chip: #DC0A2D; } /* 레드 */
+    .gen-chip[data-gen="2"] { --chip: #DAA520; } /* 골드 */
+    .gen-chip[data-gen="3"] { --chip: #16A085; } /* 에메랄드 */
+    .gen-chip[data-gen="4"] { --chip: #4A90E2; } /* 다이아 */
+    .gen-chip[data-gen="5"] { --chip: #2C3E50; } /* 블랙/화이트 */
+    .gen-chip[data-gen="6"] { --chip: #025DA6; } /* X */
+    .gen-chip[data-gen="7"] { --chip: #E89D3C; } /* 썬 */
+    .gen-chip[data-gen="8"] { --chip: #00A1E9; } /* 소드 */
+    .gen-chip[data-gen="9"] { --chip: #C8102E; } /* 스칼렛 */
 
     .grid {
       display: grid;
@@ -342,19 +384,18 @@
 <!-- 도감 탭 -->
 <div id="tab-dex" class="tab-panel active">
   <div class="filter-bar">
-    <select id="gen-select" onchange="onGenChange()">
-      <option value="">세대 / 지방 선택</option>
-      <option value="1">1세대 — 관동지방 (1~151)</option>
-      <option value="2">2세대 — 성도지방 (152~251)</option>
-      <option value="3">3세대 — 호연지방 (252~386)</option>
-      <option value="4">4세대 — 신오지방 (387~493)</option>
-      <option value="5">5세대 — 하나지방 (494~649)</option>
-      <option value="6">6세대 — 칼로스지방 (650~721)</option>
-      <option value="7">7세대 — 알로라지방 (722~809)</option>
-      <option value="8">8세대 — 가라르지방 (810~905)</option>
-      <option value="9">9세대 — 팔데아지방 (906~1025)</option>
-    </select>
     <input id="search-input" type="text" placeholder="이름으로 검색..." oninput="filterCards()" />
+    <div class="gen-chips" id="gen-chips">
+      <button class="gen-chip" data-gen="1" onclick="selectGen(1)">1세대<span class="region">관동</span></button>
+      <button class="gen-chip" data-gen="2" onclick="selectGen(2)">2세대<span class="region">성도</span></button>
+      <button class="gen-chip" data-gen="3" onclick="selectGen(3)">3세대<span class="region">호연</span></button>
+      <button class="gen-chip" data-gen="4" onclick="selectGen(4)">4세대<span class="region">신오</span></button>
+      <button class="gen-chip" data-gen="5" onclick="selectGen(5)">5세대<span class="region">하나</span></button>
+      <button class="gen-chip" data-gen="6" onclick="selectGen(6)">6세대<span class="region">칼로스</span></button>
+      <button class="gen-chip" data-gen="7" onclick="selectGen(7)">7세대<span class="region">알로라</span></button>
+      <button class="gen-chip" data-gen="8" onclick="selectGen(8)">8세대<span class="region">가라르</span></button>
+      <button class="gen-chip" data-gen="9" onclick="selectGen(9)">9세대<span class="region">팔데아</span></button>
+    </div>
   </div>
   <div id="dex-grid" class="grid">
     <div class="empty-state">
@@ -499,31 +540,53 @@ function switchTab(e, tab) {
   if (tab === 'quiz') updateStartLevelDisplay();
 }
 
-// 세대 선택
-async function onGenChange() {
-  const gen = document.getElementById('gen-select').value;
-  if (!gen) return;
+// 세대 선택 (칩 클릭) — 30마리씩 점진적으로 표시
+let currentGenLoadId = 0;
+async function selectGen(gen) {
+  document.querySelectorAll('.gen-chip').forEach(c => {
+    c.classList.toggle('active', parseInt(c.dataset.gen) === gen);
+  });
   const { start, end } = GENERATIONS[gen];
   const grid = document.getElementById('dex-grid');
-  grid.innerHTML = loaderHTML(`포켓몬을 불러오는 중... (${end - start + 1}마리)`);
+  grid.innerHTML = loaderHTML(`포켓몬을 불러오는 중...`);
   document.getElementById('search-input').value = '';
 
+  const myLoadId = ++currentGenLoadId;
   const ids = Array.from({ length: end - start + 1 }, (_, i) => start + i);
-  currentPokemon = await Promise.all(ids.map(fetchPokemon));
-  renderGrid(currentPokemon);
+  currentPokemon = [];
+
+  const CHUNK = 30;
+  for (let i = 0; i < ids.length; i += CHUNK) {
+    if (myLoadId !== currentGenLoadId) return;
+    const chunk = ids.slice(i, i + CHUNK);
+    const fetched = await Promise.all(chunk.map(fetchPokemon));
+    if (myLoadId !== currentGenLoadId) return;
+    currentPokemon.push(...fetched);
+    renderGrid(currentPokemon);
+  }
 }
 
-// API
+// 한국어 이름 사전 (한 번만 로드)
+let koNamesPromise = null;
+function loadKoNames() {
+  if (!koNamesPromise) {
+    koNamesPromise = fetch('https://raw.githubusercontent.com/sindresorhus/pokemon/main/data/ko.json')
+      .then(r => r.json())
+      .catch(() => []);
+  }
+  return koNamesPromise;
+}
+
+// API (species 호출 제거 → 호출 수 절반)
 async function fetchPokemon(id) {
   if (pokemonCache[id]) return pokemonCache[id];
-  const [base, species] = await Promise.all([
+  const [base, koNames] = await Promise.all([
     fetch(`https://pokeapi.co/api/v2/pokemon/${id}`).then(r => r.json()),
-    fetch(`https://pokeapi.co/api/v2/pokemon-species/${id}`).then(r => r.json())
+    loadKoNames()
   ]);
-  const koName = species.names.find(n => n.language.name === 'ko')?.name || base.name;
   const data = {
     id,
-    name: koName,
+    name: koNames[id - 1] || base.name,
     types: base.types.map(t => t.type.name),
     img: base.sprites.other['official-artwork'].front_default || base.sprites.front_default,
     height: base.height,
